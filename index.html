@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#06080c">
+  <meta name="description" content="SYLVAN Wallpaper Lab — AI 原创壁纸、桌面氛围灵感与外设搭配清单。">
+  <title>SYLVAN Wallpaper Lab</title>
+  <link rel="stylesheet" href="assets/css/style.css?v=20260630-6">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="返回首页">
+      <span class="brand-mark">S</span>
+      <span>SYLVAN <em>LAB</em></span>
+    </a>
+    <nav class="main-nav" aria-label="主导航">
+      <a href="#wallpapers">壁纸</a>
+      <a href="#setups">桌搭</a>
+      <a href="#gear">外设</a>
+      <a href="#contact">合作</a>
+    </nav>
+    <a class="nav-douyin" href="https://v.douyin.com/3evCcsiXYC4/" target="_blank" rel="noopener noreferrer">抖音主页 <span>↗</span></a>
+  </header>
+
+  <main id="top">
+    <section class="hero hero-video">
+      <video class="hero-background-video" autoplay muted loop playsinline preload="auto" poster="assets/images/hero-faiz.png" aria-hidden="true" tabindex="-1">
+        <source src="assets/video/hero-background.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-shade" aria-hidden="true"></div>
+      <div class="hero-inner section-shell">
+        <div class="hero-copy reveal">
+          <div class="eyebrow"><i></i> AI ORIGINAL · WALLPAPER ARCHIVE</div>
+          <p class="hero-subtitle">AI 原创壁纸 <b>·</b> 桌面氛围灵感 <b>·</b> 外设搭配清单</p>
+          <h1>SYLVAN<br><span>Wallpaper Lab</span></h1>
+          <p class="hero-desc">这里整理了账号里出现过的AI原创壁纸、电脑桌面搭配方案和外设清单；最新壁纸与上屏效果优先发布在抖音。本人二创以及原创作品，严禁商用</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#wallpapers">领取壁纸</a>
+            <a class="button button-secondary" href="#setups">查看桌搭清单（敬请期待）</a>
+            <a class="button button-ghost" href="https://v.douyin.com/3evCcsiXYC4/" target="_blank" rel="noopener noreferrer">回抖音看最新更新</a>
+          </div>
+        </div>
+        <div class="hero-side reveal">
+          <span>SYLVAN / VISUAL ARCHIVE</span>
+          <p>为屏幕寻找情绪，<br>为桌面建立风格。</p>
+          <div class="hero-stats" aria-label="站点数据">
+            <div><strong>4K</strong><span>高清适配</span></div>
+            <div><strong>05</strong><span>常用比例</span></div>
+            <div><strong>∞</strong><span>持续更新</span></div>
+          </div>
+        </div>
+        <a class="hero-scroll" href="#wallpapers"><span>SCROLL TO EXPLORE</span><i>↓</i></a>
+      </div>
+    </section>
+
+    <!-- Framer 风格的连续作品展廊：只使用项目内已有壁纸素材 -->
+    <section class="showcase-rail" aria-label="精选壁纸动态展廊">
+      <div class="rail-label section-shell"><span>RANDOM 20 / PORTRAIT</span><span>AUTO PLAY · DRAG / SWIPE ↔</span></div>
+      <div class="rail-track" id="showcaseRail" aria-label="随机20张竖版壁纸轮播"></div>
+    </section>
+
+    <section class="section-shell wallpaper-section" id="wallpapers">
+      <div class="section-heading reveal">
+        <div>
+          <span class="section-index">01 / WALLPAPER</span>
+          <h2>热门壁纸</h2>
+        </div>
+        <p>当前展示 <strong id="galleryCount">0</strong> / <strong id="galleryTotal">0</strong> 张壁纸。<br>横屏进入电脑预览，竖屏进入手机预览。</p>
+      </div>
+
+      <div class="filter-wrap reveal" aria-label="壁纸分类筛选">
+        <button class="filter-chip active" data-filter="all">全部</button>
+        <button class="filter-chip" data-filter="骑士特摄">骑士特摄</button>
+        <button class="filter-chip" data-filter="动漫真人化">动漫真人化</button>
+        <button class="filter-chip" data-filter="涂鸦速写">涂鸦速写</button>
+        <button class="filter-chip" data-filter="奥特曼主题">奥特曼主题</button>
+        <button class="filter-chip" data-filter="动漫主题">动漫主题</button>
+        <button class="filter-chip" data-filter="人物特写">人物特写</button>
+      </div>
+      <div class="orientation-filter reveal" aria-label="横竖屏筛选">
+        <span>画面方向</span>
+        <button class="orientation-chip active" data-orientation="all">全部 <b id="countAll">0</b></button>
+        <button class="orientation-chip" data-orientation="landscape">横屏 <b id="countLandscape">0</b></button>
+        <button class="orientation-chip" data-orientation="portrait">竖屏 <b id="countPortrait">0</b></button>
+      </div>
+
+      <!-- 全部壁纸由 assets/js/wallpapers-data.js 自动生成，避免手工漏图。 -->
+      <div class="wallpaper-grid" id="wallpaperGrid"></div>
+      <p class="filter-empty" hidden>该分类的壁纸正在整理中，先去抖音看看最新发布吧。</p>
+      <div class="load-more-wrap" id="loadMoreWrap" hidden>
+        <p id="loadMoreStatus">已展示最近更新的 8 张</p>
+        <button class="load-more-button" id="loadMoreButton" type="button">展开更多壁纸</button>
+      </div>
+      <button class="collapse-button" id="collapseButton" type="button" hidden><span>↑</span>收起</button>
+    </section>
+
+    <section class="section-shell setup-section" id="setups">
+      <div class="section-heading reveal"><div><span class="section-index">02 / DESK SETUP</span><h2>一张壁纸<br>搭一套电脑桌面</h2></div><p>不是堆设备，而是让光、颜色与画面<br>在同一个情绪里工作。</p></div>
+      <div class="setup-list">
+        <article class="setup-card setup-featured setup-redline reveal">
+          <div class="setup-image">
+            <img src="assets/images/hero-faiz.png" alt="假面骑士 Faiz 黑红横版壁纸" loading="lazy">
+            <span>SETUP / 01</span>
+            <div class="setup-featured-title"><small>REDLINE FAIZ / 16:9</small><strong>赤线装甲</strong></div>
+          </div>
+          <div class="setup-content">
+            <div class="featured-heading"><span class="setup-mode">REDLINE GAMING</span><h3>黑红竞技桌面</h3><p>以哑光黑建立桌面秩序，用锐利红光呼应装甲线条，保持竞技氛围与视觉克制。</p></div>
+            <dl>
+              <div><dt>桌面风格</dt><dd>哑光黑桌面 / 金属结构 / 横向宽屏</dd></div>
+              <div><dt>配色建议</dt><dd><i class="swatch red"></i><i class="swatch dark"></i><i class="swatch white"></i> 黑 70% · 红 20% · 白 10%</dd></div>
+              <div><dt>推荐外设</dt><dd>机械键盘、轻量鼠标、超宽桌垫、红色线性氛围灯、悬臂支架</dd></div>
+            </dl>
+            <a href="#gear" class="text-arrow">查看搭配清单</a>
+          </div>
+        </article>
+        <article class="setup-card setup-featured reveal">
+          <div class="setup-image">
+            <img src="assets/images/setup-blade.png" alt="假面骑士 Blade 蓝金横版壁纸" loading="lazy">
+            <span>SETUP / 02</span>
+            <div class="setup-featured-title"><small>GILDED BLADE / 16:9</small><strong>鎏金蓝刃</strong></div>
+          </div>
+          <div class="setup-content">
+            <div class="featured-heading"><span class="setup-mode">ROYAL BLUE × GOLD</span><h3>骑士鎏金桌面</h3><p>以深海蓝压住视觉背景，用少量金色呼应装甲高光，让桌面有力量感但不显杂乱。</p></div>
+            <dl>
+              <div><dt>桌面风格</dt><dd>深蓝哑光桌面 / 金属结构 / 横向宽屏</dd></div>
+              <div><dt>配色建议</dt><dd><i class="swatch navy"></i><i class="swatch gold"></i><i class="swatch white"></i> 深蓝 60% · 鎏金 30% · 白 10%</dd></div>
+              <div><dt>推荐外设</dt><dd>金属灰键盘、深色鼠标、超宽桌垫、暖白屏幕灯、悬臂支架</dd></div>
+            </dl>
+            <a href="#gear" class="text-arrow">查看搭配清单</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-shell gear-section" id="gear">
+      <div class="section-heading reveal"><div><span class="section-index">03 / GEAR NOTES</span><h2>外设风格清单</h2></div><p>只谈搭配逻辑与使用场景。<br>链接位已预留，可按实际合作替换。</p></div>
+      <div class="gear-grid">
+        <article class="gear-card reveal"><span class="gear-index">01</span><div class="gear-icon">⌨</div><p>KEYBOARD / 键盘</p><h3>黑透或金属灰机械键盘</h3><span class="style-fit">适合：冷蓝科技 / 涂鸦速写</span><p class="reason">低饱和外壳不抢壁纸视觉，单色背光更容易统一桌面情绪。</p><a href="#" class="gear-link placeholder-link" data-label="广告位">敬请期待（广告位）</a></article>
+        <article class="gear-card reveal"><span class="gear-index">02</span><div class="gear-icon">◒</div><p>MOUSE / 鼠标</p><h3>轻量化无线鼠标</h3><span class="style-fit">适合：奥特曼主题 / 电竞桌搭</span><p class="reason">减少线材干扰，黑白基础色能自然融入多数主题。</p><a href="#" class="gear-link placeholder-link" data-label="广告位">敬请期待（广告位）</a></article>
+        <article class="gear-card reveal"><span class="gear-index">03</span><div class="gear-icon">▱</div><p>DESK MAT / 鼠标垫</p><h3>深色超宽桌垫</h3><span class="style-fit">适合：骑士特摄 / 动漫主题</span><p class="reason">大面积纯色能收住画面，让壁纸成为桌面的唯一视觉主角。</p><a href="#" class="gear-link placeholder-link" data-label="广告位">敬请期待（广告位）</a></article>
+        <article class="gear-card reveal"><span class="gear-index">04</span><div class="gear-icon">✦</div><p>AMBIENT LIGHT / 氛围灯</p><h3>RGB 灯带与屏幕灯</h3><span class="style-fit">适合：骑士特摄 / 动漫真人化</span><p class="reason">取壁纸主色作为环境光，亮度控制在屏幕的三分之一以内。</p><a href="#" class="gear-link placeholder-link" data-label="广告位">敬请期待（广告位）</a></article>
+        <article class="gear-card reveal"><span class="gear-index">05</span><div class="gear-icon">━</div><p>MONITOR LIGHT / 挂灯</p><h3>非对称光显示器挂灯</h3><span class="style-fit">适合：深色桌面 / 夜间使用</span><p class="reason">补足桌面工作区照明，又不破坏背景墙的氛围光层次。</p><a href="#" class="gear-link placeholder-link" data-label="广告位">敬请期待（广告位）</a></article>
+        <article class="gear-card reveal"><span class="gear-index">06</span><div class="gear-icon">⌁</div><p>STAND / 桌面支架</p><h3>铝合金悬臂支架</h3><span class="style-fit">适合：悬浮桌面 / 超宽屏</span><p class="reason">释放桌面纵深，让 21:9 与 32:9 壁纸获得完整的视觉空间。</p><a href="#" class="gear-link placeholder-link" data-label="广告位">敬请期待（广告位）</a></article>
+      </div>
+    </section>
+
+    <section class="douyin-section section-shell reveal">
+      <div class="douyin-glow"></div><span class="douyin-code">FOLLOW / SYLVAN</span><h2>下一张壁纸，<br><em>先在抖音见。</em></h2><p>最新壁纸、上屏效果和外设开箱优先更新在抖音</p>
+      <a class="button button-light" href="https://v.douyin.com/3evCcsiXYC4/" target="_blank" rel="noopener noreferrer">回到抖音主页</a><small>期待您的点赞/收藏/推荐，您的支持是我更新的动力~</small>
+    </section>
+
+    <section class="section-shell contact-section" id="contact">
+      <div class="section-heading reveal"><div><span class="section-index">04 / COLLABORATION</span><h2>让好产品进入<br>合适的画面</h2></div><p>品牌合作、产品开箱与定制创作。<br>欢迎带着具体想法来聊。</p></div>
+      <div class="contact-panel reveal">
+        <div class="contact-services"><span>外设推广</span><span>开箱合作</span><span>壁纸定制</span><span>商务合作私信</span></div>
+        <div class="contact-info"><span>BUSINESS CONTACT</span><h3>211739719@qq.com</h3><p>抖音/微信私信：</p><button class="button button-primary contact-qr-trigger" id="contactQrButton" type="button">发起合作</button></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><a class="brand" href="#top"><span class="brand-mark">S</span><span>SYLVAN <em>LAB</em></span></a><p>ORIGINAL VISUALS FOR DIGITAL DESKS.</p><span>© <b id="year"></b> SYLVAN WALLPAPER LAB</span></footer>
+
+  <div class="preview-modal" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="previewTitle" hidden>
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-dialog">
+      <button class="modal-close" type="button" data-close-modal aria-label="关闭预览">×</button>
+      <div class="device-stage">
+        <div class="monitor-preview"><div class="monitor"><div class="monitor-screen"><img class="preview-device-image" src="assets/images/hero-faiz.png" alt="电脑壁纸上屏预览"><div class="screen-shine"></div></div><div class="monitor-neck"></div><div class="monitor-base"></div></div></div>
+        <div class="phone-preview"><div class="phone"><div class="phone-speaker"></div><div class="phone-screen"><img class="preview-device-image" src="assets/images/wallpaper-sasuke.png" alt="手机壁纸上屏预览"><span class="phone-time">09:41</span><div class="phone-island"></div><div class="phone-home"></div></div></div></div>
+      </div>
+      <div class="preview-meta"><span id="previewMode">DESKTOP PREVIEW</span><h3 id="previewTitle">壁纸上屏效果</h3><p id="previewDescription">效果仅作氛围参考，显示效果会因屏幕比例与裁切方式有所不同。</p></div>
+    </div>
+  </div>
+  <div class="carousel-lightbox" id="carouselLightbox" role="dialog" aria-modal="true" aria-labelledby="carouselLightboxTitle" hidden>
+    <div class="modal-backdrop" data-close-carousel></div>
+    <div class="carousel-lightbox-dialog">
+      <button class="modal-close" type="button" data-close-carousel aria-label="关闭大图预览">×</button>
+      <img id="carouselLightboxImage" src="assets/images/hero-faiz.png" alt="轮播壁纸大图预览">
+      <div class="carousel-lightbox-meta"><span>SELECTED DROP</span><h3 id="carouselLightboxTitle">壁纸大图预览</h3></div>
+    </div>
+  </div>
+  <div class="contact-qr-modal" id="contactQrModal" role="dialog" aria-modal="true" aria-labelledby="contactQrTitle" hidden>
+    <div class="modal-backdrop" data-close-contact-qr></div>
+    <div class="contact-qr-dialog">
+      <button class="modal-close" type="button" data-close-contact-qr aria-label="关闭联系方式二维码">×</button>
+      <div class="contact-qr-heading"><span>SCAN TO CONTACT</span><h3 id="contactQrTitle">选择联系方式</h3><p>点击二维码单独查看，再次点击返回</p></div>
+      <div class="contact-qr-grid">
+        <figure class="contact-qr-card" role="button" tabindex="0" aria-pressed="false"><img src="assets/images/qr-douyin.jpg" alt="SYLVAN 抖音二维码"><figcaption>抖音</figcaption></figure>
+        <figure class="contact-qr-card" role="button" tabindex="0" aria-pressed="false"><img src="assets/images/qr-wechat.png" alt="SYLVAN 微信二维码"><figcaption>微信</figcaption></figure>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite">这是占位链接，请在代码中替换。</div>
+  <script src="assets/js/wallpapers-data.js?v=20260630"></script>
+  <script src="assets/js/main.js?v=20260630-9"></script>
+</body>
+</html>
