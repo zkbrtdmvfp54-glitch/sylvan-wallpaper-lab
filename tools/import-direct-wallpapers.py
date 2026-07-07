@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+import argparse
 from datetime import datetime
 from pathlib import Path
 
@@ -17,11 +18,12 @@ from PIL import Image, ImageOps
 
 PROJECT = Path(__file__).resolve().parents[1]
 DATA_FILE = PROJECT / "assets" / "js" / "wallpapers-data.js"
+DIRECT_MAP_FILE = PROJECT / "tools" / "direct-wallpaper-categories.json"
 IMPORT_DIRS = (PROJECT / "assets" / "wallpapers", PROJECT / "public" / "wallpapers")
 PREFIX = "window.SYLVAN_WALLPAPERS = "
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".avif"}
 SAFE_NAME = re.compile(r"wallpaper-(\d{4,})\.(?:jpg|jpeg|png|avif)$", re.IGNORECASE)
-DEFAULT_CATEGORY = "涂鸦速写"
+DEFAULT_CATEGORY = "骑士特摄"
 
 
 def load_items() -> list[dict]:
@@ -57,26 +59,19 @@ def next_available_number(items: list[dict]) -> int:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="导入直接放入网站目录的新壁纸")
+    parser.add_argument("--category", default=DEFAULT_CATEGORY, help="只应用于本次新增图片的栏目名称")
+    args = parser.parse_args()
+    category = args.category
     items = load_items()
-    direct_urls = {
-        relative_url(path)
-        for folder in IMPORT_DIRS
-        if folder.exists()
-        for path in folder.iterdir()
-        if path.is_file() and path.suffix.lower() in IMAGE_SUFFIXES
-    }
-    updated = 0
+    if DIRECT_MAP_FILE.exists():
+        direct_categories: dict[str, str] = json.loads(DIRECT_MAP_FILE.read_text(encoding="utf-8"))
+    else:
+        direct_categories = {}
     for item in items:
-        if item.get("src") not in direct_urls:
-            continue
-        match = re.search(r"wallpaper-(\d+)", item["src"], re.IGNORECASE)
-        if not match:
-            continue
-        number = int(match.group(1))
-        item["title"] = f"{DEFAULT_CATEGORY} · {number:02d}"
-        item["folder"] = DEFAULT_CATEGORY
-        item["categories"] = [DEFAULT_CATEGORY]
-        updated += 1
+        src = item.get("src", "")
+        if Path(src).suffix.lower() in IMAGE_SUFFIXES and item.get("categories"):
+            direct_categories.setdefault(src, item["categories"][0])
     known_sources = {item.get("src", "") for item in items}
     used_ids = {int(item["id"]) for item in items}
     next_number = next_available_number(items)
@@ -107,6 +102,8 @@ def main() -> None:
         match = SAFE_NAME.fullmatch(path.name)
         assert match is not None
         number = int(match.group(1))
+        source_url = relative_url(path)
+        item_category = direct_categories.setdefault(source_url, category)
         item_id = number if number not in used_ids else next_id
         while item_id in used_ids:
             item_id += 1
@@ -120,24 +117,29 @@ def main() -> None:
         additions.append(
             {
                 "id": item_id,
-                "title": f"{DEFAULT_CATEGORY} · {number:02d}",
-                "folder": DEFAULT_CATEGORY,
-                "src": relative_url(path),
+                "title": f"{item_category} · {number:02d}",
+                "folder": item_category,
+                "src": source_url,
                 "width": width,
                 "height": height,
                 "updatedAt": datetime.fromtimestamp(path.stat().st_mtime).isoformat(timespec="seconds"),
                 "orientation": "landscape" if width >= height else "portrait",
                 "ratio": nearest_ratio(width, height),
-                "categories": [DEFAULT_CATEGORY],
+                "categories": [item_category],
             }
         )
 
-    if additions or updated:
+    if additions:
         items = additions + items
         payload = json.dumps(items, ensure_ascii=False, separators=(",", ":"))
         DATA_FILE.write_text(f"{PREFIX}{payload};\n", encoding="utf-8")
 
-    print(f"直接上传图片：新增 {len(additions)} 张，更新 {updated} 张，展示列表共 {len(items)} 张")
+    DIRECT_MAP_FILE.write_text(
+        json.dumps(direct_categories, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    print(f"直接上传图片：新增 {len(additions)} 张，栏目：{category}，展示列表共 {len(items)} 张")
 
 
 if __name__ == "__main__":

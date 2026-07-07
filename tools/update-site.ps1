@@ -1,3 +1,5 @@
+param([string]$Category = '骑士特摄')
+
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
 $generator = Join-Path $PSScriptRoot 'generate-wallpaper-data.ps1'
@@ -12,7 +14,7 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & $python $builder
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-& $python $directImporter
+& $python $directImporter --category $Category
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host 'Gallery updated. Commit and push the changes with GitHub Desktop.'
