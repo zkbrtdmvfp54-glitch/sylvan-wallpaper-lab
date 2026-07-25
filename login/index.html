@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#06080c">
+  <meta name="description" content="登录 SYLVAN Wallpaper Lab。">
+  <title>登录 — SYLVAN Wallpaper Lab</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/premium.css">
+</head>
+<body class="premium-page">
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="返回首页"><span class="brand-mark">S</span><span>SYLVAN <em>LAB</em></span></a>
+    <nav class="main-nav" aria-label="主导航"><a href="/#wallpapers">免费壁纸</a><a href="/premium/">原创套装</a><a href="/#contact">合作</a></nav>
+    <a class="account-link premium-nav-link" href="/login/">登录</a>
+  </header>
+
+  <main class="premium-main auth-shell section-shell">
+    <section class="auth-panel">
+      <span class="section-index">ACCOUNT / EMAIL CODE</span>
+      <h1>登录<br><span>SYLVAN</span></h1>
+      <p class="premium-intro">使用邮箱验证码登录。MVP 开发环境会在页面中显示测试验证码，不会发送真实邮件。</p>
+
+      <form class="auth-form auth-step" id="requestCodeForm">
+        <label for="email">邮箱地址</label>
+        <input class="auth-input" id="email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required>
+        <button class="button button-primary" type="submit">获取登录验证码</button>
+      </form>
+
+      <form class="auth-form auth-step" id="verifyCodeForm" hidden>
+        <label for="code">6 位验证码</label>
+        <input class="auth-input" id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required>
+        <button class="button button-primary" type="submit">验证并登录</button>
+        <button class="button button-secondary" id="changeEmailButton" type="button">更换邮箱</button>
+      </form>
+      <p class="auth-message" id="authMessage" aria-live="polite"></p>
+      <p class="auth-hint">仅用于本网站账号、订单与购买记录。请勿在测试页面使用重要密码，本流程不收集密码。</p>
+    </section>
+  </main>
+
+  <script type="module" src="/assets/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#06080c">
+  <meta name="description" content="SYLVAN Wallpaper Lab 用户中心。">
+  <title>用户中心 — SYLVAN Wallpaper Lab</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/premium.css">
+</head>
+<body class="premium-page">
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="返回首页"><span class="brand-mark">S</span><span>SYLVAN <em>LAB</em></span></a>
+    <nav class="main-nav" aria-label="主导航"><a href="/#wallpapers">免费壁纸</a><a href="/premium/">原创套装</a><a href="/#contact">合作</a></nav>
+    <a class="account-link premium-nav-link" data-account-link href="/account/">我的账户</a>
+  </header>
+
+  <main class="premium-main section-shell">
+    <section class="account-hero">
+      <span class="account-kicker">ACCOUNT / LIBRARY</span>
+      <h1>我的<br>SYLVAN</h1>
+      <p class="premium-intro" id="accountIdentity">正在读取账户信息…</p>
+    </section>
+
+    <section class="account-summary" id="accountShell" aria-live="polite">
+      <article class="account-panel"><span class="section-index">PURCHASED</span><h2>已购套装</h2><div class="account-list" id="purchaseList"><p class="premium-intro">正在读取…</p></div></article>
+      <article class="account-panel"><span class="section-index">ORDERS</span><h2>订单记录</h2><div class="account-list" id="orderList"><p class="premium-intro">正在读取…</p></div></article>
+    </section>
+    <button class="button button-secondary" id="logoutButton" type="button">退出登录</button>
+  </main>
+
+  <footer class="site-footer premium-footer"><span>© <span data-year></span> SYLVAN WALLPAPER LAB</span><a href="/premium/">继续浏览原创套装</a></footer>
+  <script type="module" src="/assets/js/account.js"></script>
+</body>
+</html>
