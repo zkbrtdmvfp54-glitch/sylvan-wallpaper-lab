@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /account/
+Disallow: /login/
+Disallow: /payment/
+Disallow: /api/
+
+Sitemap: https://www.sylvanwallpaper.cn/sitemap.xml

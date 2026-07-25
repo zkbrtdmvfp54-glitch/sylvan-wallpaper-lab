@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "node server/dev-server.mjs",
-    "check": "node --check server/dev-server.mjs && node --check assets/js/main.js",
+    "check": "node tools/check-source.mjs",
+    "lint": "node tools/check-source.mjs",
+    "typecheck": "node tools/check-source.mjs",
+    "build": "node tools/build-check.mjs",
     "test": "node --test tests/*.test.mjs"
   },
   "engines": {

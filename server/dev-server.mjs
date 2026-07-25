@@ -1,14 +1,11 @@
 import { createServer } from 'node:http';
-import { randomBytes, randomUUID } from 'node:crypto';
+import { randomBytes } from 'node:crypto';
 import { extname, resolve, sep } from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { destroySession, getSessionUser, issueAuthCode, verifyAuthCode } from './lib/auth.mjs';
 import { clientIp, readJson, requestOriginAllowed, sendJson, statusLabel } from './lib/http.mjs';
 import {
-  cancelOrder,
-  completeOrder,
   createOrder,
-  failOrder,
   getOrderForUser,
   getPaidOrderForProduct,
   getProductById,
@@ -21,11 +18,13 @@ import {
   recordDownload,
 } from './lib/repositories.mjs';
 import { sessionCookie } from './lib/security.mjs';
+import { getPaymentProvider } from './payments/index.mjs';
 
 const projectRoot = resolve(import.meta.dirname, '..');
 const port = Number(process.env.PORT || 4173);
 const host = process.env.HOST || '127.0.0.1';
 const paymentProvider = process.env.PAYMENT_PROVIDER || 'mock';
+const paymentAdapter = getPaymentProvider(paymentProvider);
 const authRateLimits = new Map();
 
 const mimeTypes = {
@@ -52,6 +51,9 @@ function publicFileFor(pathname) {
     ['/payment/mock/', 'payment/mock/index.html'],
     ['/payment/success/', 'payment/success/index.html'],
     ['/payment/cancel/', 'payment/cancel/index.html'],
+    ['/legal/', 'legal/index.html'],
+    ['/robots.txt', 'robots.txt'],
+    ['/sitemap.xml', 'sitemap.xml'],
   ]);
   if (routeMap.has(pathname)) return routeMap.get(pathname);
   if (pathname.startsWith('/assets/')) return pathname.slice(1);
@@ -210,10 +212,12 @@ async function handleApi(request, response, url) {
       product,
       provider: paymentProvider,
     });
+    const payment = result.order ? paymentAdapter.createPayment({ order: result.order }) : null;
     sendJson(response, 200, {
       alreadyPurchased: result.alreadyPurchased,
       order: result.order ? orderView(result.order) : null,
       reused: Boolean(result.reused),
+      payment,
     });
     return true;
   }
@@ -241,19 +245,7 @@ async function handleApi(request, response, url) {
       sendJson(response, 404, { code: 'ORDER_NOT_FOUND', message: '订单不存在' });
       return true;
     }
-    let updatedOrder;
-    if (mockMatch[1] === 'success') {
-      updatedOrder = completeOrder({
-        orderNumber: order.orderNumber,
-        userId: user.id,
-        transactionId: `mock_${randomUUID()}`,
-        eventId: `mock_event_${order.orderNumber}`,
-      });
-    } else if (mockMatch[1] === 'failure') {
-      updatedOrder = failOrder(order.orderNumber, user.id);
-    } else {
-      updatedOrder = cancelOrder(order.orderNumber, user.id);
-    }
+    const updatedOrder = paymentAdapter.settle({ action: mockMatch[1], order, userId: user.id });
     sendJson(response, 200, { order: orderView(updatedOrder) });
     return true;
   }
@@ -295,7 +287,7 @@ async function handleApi(request, response, url) {
   return false;
 }
 
-const server = createServer(async (request, response) => {
+export const server = createServer(async (request, response) => {
   securityHeaders(response);
   const url = new URL(request.url, `http://${request.headers.host || `${host}:${port}`}`);
   try {
@@ -337,4 +329,3 @@ server.listen(port, host, () => {
   console.log(`SYLVAN dev server running at http://${host}:${port}`);
   console.log(`Payment provider: ${paymentProvider}`);
 });
-

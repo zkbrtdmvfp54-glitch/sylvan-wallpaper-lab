@@ -1,4 +1,5 @@
 import { escapeHtml, formatPrice, request } from './premium-common.js';
+import { trackEvent } from './analytics.js';
 
 const identity = document.querySelector('#accountIdentity');
 const purchaseList = document.querySelector('#purchaseList');
@@ -64,6 +65,9 @@ async function loadAccount() {
     renderOrders(payload.orders);
     renderDownloads(payload.downloads);
     renderMembership(payload.membership);
+    purchaseList.querySelectorAll('a[href^="/api/downloads/"]').forEach((link) => {
+      link.addEventListener('click', () => trackEvent('download_success', { href: link.getAttribute('href') }));
+    });
   } catch (error) {
     if (error.status === 401) {
       location.href = `/login/?returnTo=${encodeURIComponent(location.pathname)}`;

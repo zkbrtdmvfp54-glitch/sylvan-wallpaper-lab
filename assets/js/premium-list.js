@@ -1,4 +1,5 @@
 import { escapeHtml, formatPrice, request } from './premium-common.js';
+import { trackEvent } from './analytics.js';
 
 const grid = document.querySelector('#premiumGrid');
 const filters = document.querySelectorAll('[data-premium-filter]');
@@ -43,6 +44,10 @@ async function loadProducts() {
     grid.innerHTML = payload.products.length
       ? payload.products.map(renderCard).join('')
       : '<div class="premium-empty">当前筛选条件下暂无套装。</div>';
+    payload.products.forEach((product) => trackEvent('product_impression', { productId: product.id }));
+    grid.querySelectorAll('.premium-card a').forEach((link) => {
+      link.addEventListener('click', () => trackEvent('product_click', { href: link.getAttribute('href') }));
+    });
   } catch (error) {
     grid.innerHTML = `<div class="premium-empty">${escapeHtml(error.message)}</div>`;
   }
@@ -58,4 +63,3 @@ filters.forEach((button) => {
 
 sort.addEventListener('change', loadProducts);
 loadProducts();
-

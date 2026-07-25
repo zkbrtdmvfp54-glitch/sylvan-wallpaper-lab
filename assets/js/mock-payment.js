@@ -1,4 +1,5 @@
 import { escapeHtml, formatPrice, request } from './premium-common.js';
+import { trackEvent } from './analytics.js';
 
 const shell = document.querySelector('#paymentShell');
 const orderNumber = new URLSearchParams(location.search).get('order');
@@ -36,6 +37,7 @@ async function submitAction(action) {
       method: 'POST',
       body: JSON.stringify({ orderNumber }),
     });
+    trackEvent(action === 'success' ? 'payment_success' : 'payment_failed', { orderNumber, action });
     location.href = action === 'success'
       ? `/payment/success/?order=${encodeURIComponent(orderNumber)}`
       : `/payment/cancel/?order=${encodeURIComponent(orderNumber)}&state=${action}`;
