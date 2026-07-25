@@ -96,7 +96,7 @@ export function getProductBySlug(slug) {
 
 export function getProductById(id) {
   return mapProduct(
-    getDatabase().prepare('SELECT * FROM products WHERE id = ? AND is_published = 1').get(id),
+    getDatabase().prepare('SELECT * FROM products WHERE id = ?').get(id),
   );
 }
 
@@ -238,6 +238,16 @@ export function cancelOrder(orderNumber, userId) {
   return getOrderForUser(orderNumber, userId);
 }
 
+export function failOrder(orderNumber, userId) {
+  getDatabase()
+    .prepare(
+      `UPDATE orders SET status = 'failed'
+       WHERE order_number = ? AND user_id = ? AND status = 'pending'`,
+    )
+    .run(orderNumber, userId);
+  return getOrderForUser(orderNumber, userId);
+}
+
 export function hasPurchase(userId, productId) {
   return Boolean(
     getDatabase()
@@ -268,6 +278,25 @@ export function listPurchasesByUser(userId) {
     orderNumber: row.order_number,
     createdAt: row.created_at,
   }));
+}
+
+export function listDownloadsByUser(userId) {
+  return getDatabase()
+    .prepare(
+      `SELECT downloads.*, products.title
+       FROM downloads
+       JOIN products ON products.id = downloads.product_id
+       WHERE downloads.user_id = ?
+       ORDER BY downloads.downloaded_at DESC`,
+    )
+    .all(userId)
+    .map((row) => ({
+      id: row.id,
+      productId: row.product_id,
+      productTitle: row.title,
+      downloadedAt: row.downloaded_at,
+      downloadCount: row.download_count,
+    }));
 }
 
 export function recordDownload({ userId, productId, orderId, ip, userAgent }) {
@@ -307,4 +336,3 @@ export function getPaidOrderForProduct(userId, productId) {
     )
     .get(userId, productId);
 }
-

@@ -17,6 +17,7 @@ function renderOrder(order) {
     </div>
     <div class="product-buy-row">
       <button class="button button-primary" type="button" data-payment-action="success">模拟支付成功</button>
+      <button class="button button-secondary" type="button" data-payment-action="failure">模拟支付失败</button>
       <button class="button button-secondary" type="button" data-payment-action="cancel">取消订单</button>
     </div>
     <p class="payment-hint">MOCK PAYMENT ONLY · NO REAL CHARGE · NO PAYMENT KEY</p>`;
@@ -37,7 +38,7 @@ async function submitAction(action) {
     });
     location.href = action === 'success'
       ? `/payment/success/?order=${encodeURIComponent(orderNumber)}`
-      : `/payment/cancel/?order=${encodeURIComponent(orderNumber)}`;
+      : `/payment/cancel/?order=${encodeURIComponent(orderNumber)}&state=${action}`;
   } catch (error) {
     shell.querySelector('.premium-intro').textContent = error.message;
     shell.querySelectorAll('button').forEach((button) => {
@@ -64,4 +65,3 @@ async function loadOrder() {
 }
 
 loadOrder();
-
