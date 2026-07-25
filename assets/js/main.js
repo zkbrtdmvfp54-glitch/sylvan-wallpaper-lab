@@ -41,6 +41,7 @@ function renderGallery() {
     const src = escapeHtml(item.src);
     const direction = item.orientation === 'landscape' ? '横屏' : '竖屏';
     const categories = escapeHtml(item.categories.join(' '));
+    const accessType = item.accessType || 'free';
 
     return `
       <article class="wallpaper-card ${item.orientation}" data-id="${item.id}" data-category="${categories}" data-orientation="${item.orientation}">
@@ -51,7 +52,7 @@ function renderGallery() {
           <span class="preview-cue">${item.orientation === 'landscape' ? '电脑预览' : '手机预览'} ↗</span>
         </button>
         <div class="card-body">
-          <div><h3>${title}</h3><p>${escapeHtml(item.folder)} / ${item.width} × ${item.height}</p></div>
+          <div><h3>${title}</h3><p>${escapeHtml(item.folder)} / ${item.width} × ${item.height}</p>${accessType === 'free' ? '<span class="free-access">免费 / FREE · 个人使用</span>' : ''}</div>
           <div class="tags"><span>${item.ratio}</span><span>${direction}</span></div>
         </div>
         <div class="card-actions">
