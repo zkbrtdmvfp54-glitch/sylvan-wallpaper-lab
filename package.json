@@ -1,0 +1,14 @@
+{
+  "name": "sylvan-wallpaper-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server/dev-server.mjs",
+    "check": "node --check server/dev-server.mjs && node --check assets/js/main.js",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

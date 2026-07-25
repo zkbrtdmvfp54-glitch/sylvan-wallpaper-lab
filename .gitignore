@@ -1,0 +1,21 @@
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Local runtime data and protected test files
+data/runtime/
+private/
+
+# Node and tooling
+node_modules/
+npm-debug.log*
+
+# Local platform metadata
+.vercel/
+.openai/
+
+# OS files
+.DS_Store
+Thumbs.db
+
