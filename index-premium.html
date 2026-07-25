@@ -21,7 +21,7 @@
       <a href="#wallpapers">壁纸</a>
       <a href="#setups">桌搭</a>
       <a href="#gear">外设</a>
-      <a href="/premium/">原创套装</a>
+      <a href="/premium/" id="premiumNavLink">原创套装</a>
       <a href="#contact">合作</a>
     </nav>
     <a class="nav-douyin" href="https://v.douyin.com/3evCcsiXYC4/" target="_blank" rel="noopener noreferrer">抖音主页 <span>↗</span></a>
@@ -199,5 +199,12 @@
     <script src="assets/js/wallpapers-data.js?v=20260717"></script>
   <script src="assets/js/main.js?v=20260725-premium"></script>
   <script type="module" src="assets/js/site-analytics.js?v=20260725-premium"></script>
+  <script>
+    // 直接双击本文件时，绝对路径 /premium/ 会被误解析为磁盘根目录。
+    // 付费模块包含登录、订单和下载鉴权，因此本地预览必须通过开发服务器访问。
+    if (location.protocol === 'file:') {
+      document.querySelector('#premiumNavLink').href = 'http://127.0.0.1:4173/premium/';
+    }
+  </script>
 </body>
 </html>
